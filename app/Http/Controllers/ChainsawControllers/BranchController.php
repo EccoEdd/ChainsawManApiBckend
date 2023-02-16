@@ -9,7 +9,7 @@ use Illuminate\Http\Request;
 class BranchController extends Controller
 {
     public function createBranch(Request $request){
-        $validate = $request->validate([
+        $request->validate([
             'name' => 'required|max:45|unique:branches',
             'location' => 'required|unique:branches'
         ],[
@@ -23,9 +23,6 @@ class BranchController extends Controller
                 'unique'   => 'You can\'t have two or more branches in the same spot'
             ]
         ]);
-        return 'Kobeni my beloved';
-        if(!$validate)
-            return $request;
         return $request;
     }
     public function readBranches(){
