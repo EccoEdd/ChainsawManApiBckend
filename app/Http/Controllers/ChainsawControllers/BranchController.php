@@ -5,11 +5,13 @@ namespace App\Http\Controllers\ChainsawControllers;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
+use Illuminate\Support\Facades\Validator;
+
 
 class BranchController extends Controller
 {
     public function createBranch(Request $request){
-        $request->validate([
+        $validate = Validator::make($request->all(),[
             'name' => 'required|max:45|unique:branches',
             'location' => 'required|unique:branches'
         ],[
@@ -23,10 +25,12 @@ class BranchController extends Controller
                 'unique'   => 'You can\'t have two or more branches in the same spot'
             ]
         ]);
-        return $request;
+        if($validate->errors())
+            return 'Pendejo!!!!!';
+        return 'Hello';
     }
     public function readBranches(){
-
+        return 'Hello';
     }
     public function updateBranch(Request $request, int $id){
 

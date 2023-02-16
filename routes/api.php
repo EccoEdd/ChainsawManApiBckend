@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ChainsawControllers\BranchController;
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -18,8 +19,17 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+Route::get('/', [BranchController::class, 'readBranches']);
+
+Route::post('/create', [BranchController::class, 'createBranch']);
+
+
 Route::prefix('chainsaw')->group(function(){
+
+    Route::get('/', [BranchController::class, 'readBranches']);
+
+
     Route::prefix('branches')->group(function(){
-       Route::post('create', [BranchController::class, 'createBranch']);
+
     });
 });

@@ -17,3 +17,4 @@ Route::get('/', function () {
     //return 'Kobeni my beloved';
     return view('welcome');
 });
+
