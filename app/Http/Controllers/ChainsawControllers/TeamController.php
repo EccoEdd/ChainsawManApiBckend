@@ -7,5 +7,16 @@ use Illuminate\Http\Request;
 
 class TeamController extends Controller
 {
-    //
+    public function createTeam(Request $request){
+
+    }
+    public function readTeams(){
+
+    }
+    public function updateTeam(){
+
+    }
+    public function deleteTeam(){
+
+    }
 }
