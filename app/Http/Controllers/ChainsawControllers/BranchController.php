@@ -50,9 +50,6 @@ class BranchController extends Controller
             'name' => 'required|max:45|unique:branches,name,'.$id,
             'location' => 'required|unique:branches,location,'.$id
         ],[
-            $request->id => [
-              'exits' => 'Not Found'
-            ],
             'name' => [
                 'required' => 'You need a name for your branch',
                 'max'      => 'You only have 45 characters long',

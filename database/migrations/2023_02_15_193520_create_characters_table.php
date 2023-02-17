@@ -19,8 +19,7 @@ return new class extends Migration
             $table->string('type', 20);
             $table->boolean('alive')
                 ->default(true);
-            $table->unsignedTinyInteger('age')
-                ->nullable(false);
+            $table->unsignedTinyInteger('age');
             $table->foreignId('team_id')
                 ->references('id')
                 ->on('teams')
