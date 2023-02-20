@@ -10,7 +10,6 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use App\Models\User;
 use Illuminate\Support\Facades\Http;
-use const http\Client\Curl\Features\HTTP2;
 
 class SmsSender implements ShouldQueue
 {
