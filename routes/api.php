@@ -6,6 +6,7 @@ use App\Http\Controllers\ChainsawControllers\BranchController;
 use App\Http\Controllers\ChainsawControllers\TeamController;
 use App\Http\Controllers\ChainsawControllers\DemonController;
 use App\Http\Controllers\ChainsawControllers\CharacterController;
+use App\Http\Controllers\UserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -22,34 +23,38 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::prefix('chainsaw')->group(function(){
+Route::middleware(['auth:sanctum', 'active'])->prefix('chainsaw')->group(function(){
 
-    Route::prefix('branches')->group(function(){
+    Route::middleware(['role:a'])->prefix('branches')->group(function(){
         Route::post('create',       [BranchController::class, 'createBranch']);
         Route::get('read',          [BranchController::class, 'readBranches']);
         Route::put('update/{id}',   [BranchController::class, 'updateBranch'])->where('id', '[0-9]+');
         Route::delete('delete/{id}',[BranchController::class, 'deleteBranch'])->where('id', '[0-9]+');
     });
 
-    Route::prefix('teams')->group(function(){
+    Route::middleware(['role:a'])->prefix('teams')->group(function(){
         Route::post('create',       [TeamController::class, 'createTeam']);
         Route::get('read',          [TeamController::class, 'readTeams']);
         Route::put('update/{id}',   [TeamController::class, 'updateTeam'])->where('id', '[0-9]+');
         Route::delete('delete/{id}',[TeamController::class, 'deleteTeam'])->where('id', '[0-9]+');
     });
 
-    Route::prefix('demons')->group(function(){
+    Route::middleware(['role:a,u'])->prefix('demons')->group(function(){
         Route::post('create',       [DemonController::class, 'createDemon']);
         Route::get('read',          [DemonController::class, 'readDemons']);
         Route::put('update/{id}',   [DemonController::class, 'updateDemon'])->where('id', '[0-9]+');
         Route::delete('delete/{id}',[DemonController::class, 'deleteDemon'])->where('id', '[0-9]+');
     });
 
-    Route::prefix('characters')->group(function(){
+    Route::middleware(['role:a,u'])->prefix('characters')->group(function(){
         Route::post('create',       [CharacterController::class, 'createCharacter']);
         Route::get('read',          [CharacterController::class, 'readCharacters']);
         Route::put('update/{id}',   [CharacterController::class, 'updateCharacter'])->where('id', '[0-9]+');
         Route::delete('delete/{id}',[CharacterController::class, 'deleteCharacter'])->where('id', '[0-9]+');
     });
 
+});
+
+Route::prefix('user')->group(function() {
+    Route::post('logIn', [UserController::class, 'logIn']);
 });

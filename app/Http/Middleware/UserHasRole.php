@@ -13,8 +13,12 @@ class UserHasRole
      *
      * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
      */
-    public function handle(Request $request, Closure $next): Response
+    public function handle(Request $request, Closure $next, ...$roles): Response
     {
-        return $next($request);
+        foreach($roles as $role)
+            if ($request->user()->hasRol($role))
+                return $next($request);
+
+        abort(403, 'Not Authorized');
     }
 }
