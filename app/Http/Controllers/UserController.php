@@ -2,11 +2,16 @@
 
 namespace App\Http\Controllers;
 
+use App\Jobs\FirstAuthMailSender;
+use App\Jobs\SecondAuthMailSender;
+use App\Jobs\SmsSender;
 use Illuminate\Http\Request;
 use App\Models\User;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Hash;
-
+use Nette\Utils\Random;
+use Illuminate\Support\Facades\URL;
 
 class UserController extends Controller
 {
@@ -14,17 +19,26 @@ class UserController extends Controller
         $validation = Validator::make($request->all(), [
             'user'  => 'required',
             'email' => 'required|unique:users|email:rfc,dns',
-            'phone' => 'required|unique:users|size:10|numeric',
+            'phone' => 'required|unique:users|numeric',
             'password' => 'required'
         ]);
         if($validation->fails())
             return response()->json(['message' => 'unsuccessful...','errors' => $validation->errors()], 403);
 
         $user = new User();
-        $user->name = $request->name;
-        $user->email = $request->email;
-        $user->password = Hash::make($request->password);
 
+        $user->name = $request->user;
+        $user->email = $request->email;
+        $user->phone = $request->phone;
+        $user->password = Hash::make($request->password);
+        $user->code = random_int(100000, 999999);
+        $user->role_id = 2;
+
+        $user->save();
+        $url = URL::temporarySignedRoute('sendCodeAndVerifyLink', now()->addMinutes(30), ['id' => $user->id]);
+        FirstAuthMailSender::dispatch($user, $url)->delay(now()->addSeconds(2));
+
+        return response()->json(['message' => 'please check your Mail to continue']);
     }
 
     public function logIn(Request $request){
@@ -48,4 +62,26 @@ class UserController extends Controller
         $request->user()->tokens()->delete();
         return response()->json(['message' => 'Good Bye'], 200);
     }
+
+
+    public function sendCodeAndVerifyLink(Request $request, int $id){
+        if(!$request->hasValidSignature())
+            abort(401);
+        $user = User::find($id);
+        if(!$user)
+            return response()->json(['message' => 'error 404 not found'], 404);
+        if($user->active)
+            return response()->json(['message' => 'User already verified'], 304);
+        $url = URL::temporarySignedRoute('verifyNumber', now()->addMinutes(30), ['user' => $user->id]);
+
+        SmsSender::dispatch($user);
+        SecondAuthMailSender::dispatch($user, $url);
+
+        return response()->json(['message' => 'please check your phone'], 200);
+    }
+
+    public function verifyNumber(int $id){
+
+    }
+
 }

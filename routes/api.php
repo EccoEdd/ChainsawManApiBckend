@@ -61,4 +61,12 @@ Route::prefix('user')->group(function() {
     Route::middleware(['auth:sanctum', 'active'])->group(function(){
         Route::delete('logOut', [UserController::class, 'logOut']);
     });
+
+    Route::middleware('signed')->prefix('verify')->group(function(){
+        Route::get('/{id}', [UserController::class, 'sendCodeAndVerifyLink'])
+            ->where('id', '[0-9]+')
+            ->name('sendCodeAndVerifyLink');
+        Route::post('/verifyNumber', [UserController::class, 'verifyNumber'])
+            ->name('verifyNumber');
+    });
 });
