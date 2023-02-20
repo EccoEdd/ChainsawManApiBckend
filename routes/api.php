@@ -56,5 +56,9 @@ Route::middleware(['auth:sanctum', 'active'])->prefix('chainsaw')->group(functio
 });
 
 Route::prefix('user')->group(function() {
+    Route::post('register', [UserController::class, 'createUser']);
     Route::post('logIn', [UserController::class, 'logIn']);
+    Route::middleware(['auth:sanctum', 'active'])->group(function(){
+        Route::delete('logOut', [UserController::class, 'logOut']);
+    });
 });
