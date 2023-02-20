@@ -80,7 +80,7 @@ class UserController extends Controller
         return response()->json(['message' => 'please check your phone'], 200);
     }
 
-    public function verifyNumber(int $id){
+    public function number(Request $request, int $id){
 
     }
 
