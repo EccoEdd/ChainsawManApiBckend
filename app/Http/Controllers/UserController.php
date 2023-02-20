@@ -81,7 +81,20 @@ class UserController extends Controller
     }
 
     public function number(Request $request, int $id){
+        if(!$request->hasValidSignature())
+            abort(401);
 
+        $user = User::find($id);
+
+        if(!$user)
+            return response()->json(['message' => 'error 404 not found'], 404);
+        if($user->active)
+            return response()->json(['message' => 'User already verified'], 304);
+
+        $user->active = true;
+        $user->save();
+
+        return response()->json(['message' => 'Welcome'], 200);
     }
 
 }
