@@ -48,8 +48,7 @@ class User extends Authenticatable
     }
 
     public function hasRol($role){
-        // dd($role);
-        return $this->role->name == $role;
+        return $this->role->role == $role;
     }
 
 }
