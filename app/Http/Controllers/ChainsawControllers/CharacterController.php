@@ -13,18 +13,17 @@ class CharacterController extends Controller
         $validate = $this->getMake($request);
         if($validate->fails())
             return response()->json(['message' => 'unsuccessful...','errors' => $validate->errors()], 403);
-        $character = Character::firstOrCreate([
-            'name' => $request->name,
-            'l_name' => $request->l_name,
-            'type' => $request->type,
-            'age' => $request->age,
-            'team_id' => $request->id
-        ]);
+        $character = new Character();
+        $character->name = $request->name;
+        $character->l_name = $request->l_name;
+        $character->type = $request->type;
+        $character->age = $request->age;
+        $character->team_id = $request->id;
         $character->save();
         return response()->json(['message' => 'success...', 'data' => $character], 201);
     }
     public function readCharacters(){
-        $characters = Character::all();
+        $characters = Character::with('team')->get();
         return response()->json(['message' => 'all the data...', 'data' => $characters], 202);
     }
     public function updateCharacter(Request $request, int $id){
@@ -69,7 +68,7 @@ class CharacterController extends Controller
             'l_name' => 'max:15',
             'type' => 'required|max:20',
             'alive' => 'boolean',
-            'age' => 'max:5|integer',
+            'age' => 'max:99999|integer',
             'id' => 'required|exists:teams'
         ], [
             'name' => [

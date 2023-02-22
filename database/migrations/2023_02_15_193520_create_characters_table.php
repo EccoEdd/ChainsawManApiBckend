@@ -15,11 +15,14 @@ return new class extends Migration
             $table->id();
             $table->string('name', 15)
                 ->nullable(false);
-            $table->string('l_name', 15);
-            $table->string('type', 20);
+            $table->string('l_name', 15)
+                ->nullable();
+            $table->string('type', 20)
+                ->nullable();
             $table->boolean('alive')
                 ->default(true);
-            $table->unsignedTinyInteger('age');
+            $table->unsignedTinyInteger('age')
+                ->nullable();
             $table->foreignId('team_id')
                 ->references('id')
                 ->on('teams')

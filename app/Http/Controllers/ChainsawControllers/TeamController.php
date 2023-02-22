@@ -36,7 +36,7 @@ class TeamController extends Controller
         return response()->json(['message' => 'success...', 'data' => $team], 201);
     }
     public function readTeams(){
-        $teams = Team::all();
+        $teams = Team::with('branch')->get();
         return response()->json(['message' => 'all the data...', 'data' => $teams], 202);
     }
     public function updateTeam(Request $request, int $id){
