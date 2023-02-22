@@ -35,7 +35,7 @@ class UserController extends Controller
         $user->role_id = 2;
 
         $user->save();
-        $url = URL::temporarySignedRoute('sendCodeAndVerifyLink', now()->addMinutes(30), ['id' => $user->id]);
+        $url = URL::temporarySignedRoute('link', now()->addMinutes(30), ['id' => $user->id]);
         FirstAuthMailSender::dispatch($user, $url)->delay(now()->addSeconds(2));
 
         return response()->json(['message' => 'please check your Mail to continue']);
@@ -72,7 +72,7 @@ class UserController extends Controller
             return response()->json(['message' => 'error 404 not found'], 404);
         if($user->active)
             return response()->json(['message' => 'User already verified'], 304);
-        $url = URL::temporarySignedRoute('verifyNumber', now()->addMinutes(30), ['user' => $user->id]);
+        $url = URL::temporarySignedRoute('number', now()->addMinutes(30), ['id' => $user->id]);
 
         SmsSender::dispatch($user);
         SecondAuthMailSender::dispatch($user, $url);
@@ -96,5 +96,4 @@ class UserController extends Controller
 
         return response()->json(['message' => 'Welcome'], 200);
     }
-
 }

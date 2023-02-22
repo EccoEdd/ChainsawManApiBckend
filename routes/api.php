@@ -65,7 +65,7 @@ Route::prefix('user')->group(function() {
     Route::middleware('signed')->prefix('verify')->group(function(){
         Route::get('/{id}', [UserController::class, 'sendCodeAndVerifyLink'])
             ->where('id', '[0-9]+')
-            ->name('sendCodeAndVerifyLink');
+            ->name('link');
         Route::post('/number', [UserController::class, 'number'])
             ->name('number');
     });
