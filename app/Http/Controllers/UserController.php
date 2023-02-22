@@ -83,6 +83,11 @@ class UserController extends Controller
     public function number(Request $request, int $id){
         if(!$request->hasValidSignature())
             abort(401);
+        $validate = Validator::make($request->all(),[
+           'code' => 'required'
+        ]);
+        if($validate->fails())
+            return response()->json(['message' => 'unsuccessful...','errors' => $validate->errors()], 400);
 
         $user = User::find($id);
 
@@ -90,10 +95,10 @@ class UserController extends Controller
             return response()->json(['message' => 'error 404 not found'], 404);
         if($user->active)
             return response()->json(['message' => 'User already verified'], 304);
-
+        if($user->code != $request->code)
+            return response()->json(['message' => 'unsuccessful...'], 400);
         $user->active = true;
         $user->save();
-
         return response()->json(['message' => 'Welcome'], 200);
     }
 }
