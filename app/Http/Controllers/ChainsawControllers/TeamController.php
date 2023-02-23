@@ -12,14 +12,14 @@ class TeamController extends Controller
     public function createTeam(Request $request){
         $validate = Validator::make($request->all(),[
             'name'      => 'required|max:45|unique:teams',
-            'id' => 'required|exists:branches'
+            'id'        => 'required|exists:branches'
         ],[
             'name' => [
                 'required' => 'You need a name for your team',
                 'max'      => 'You only have 45 characters long',
                 'unique'   => 'This team already exists'
             ],
-            'branch_id'    => [
+            'id'    => [
                 'required' => 'You need a branch to link your team',
                 'exits'    => 'The branch must exists'
             ]
@@ -71,7 +71,7 @@ class TeamController extends Controller
         $oldTeam = Team::find($id);
         $team->name = $request->name;
         $team->status = $request->status;
-        $team->id = $request->id;
+        $team->branch_id = $request->id;
         $team->save();
 
         return response()->json(['message' => 'success...', 'oldData' => $oldTeam, 'newData' => $team], 202);
