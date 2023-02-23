@@ -63,7 +63,7 @@ class DemonController extends Controller
 
         $oldDemon = Demon::find($id);
         $demon->name = $request->name;
-        $demon->category = $request->category();
+        $demon->category = $request->category;
         $demon->save();
 
         return response()->json(['message' => 'success...', 'oldData' => $oldDemon, 'newData' => $demon], 202);

@@ -68,7 +68,7 @@ class CharacterController extends Controller
             'l_name' => 'max:15',
             'type' => 'required|max:20',
             'alive' => 'boolean',
-            'age' => 'max:99999|integer',
+            'age' => 'max:99999',
             'id' => 'required|exists:teams'
         ], [
             'name' => [
@@ -86,8 +86,7 @@ class CharacterController extends Controller
                 'boolean' => 'This needs to be true or false'
             ],
             'age' => [
-                'max' => 'Well We don\'t know actually how long their age could be so you have 99999',
-                'integer' => 'It must be a number'
+                'max' => 'Well We don\'t know actually how long their age could be so you have 99999'
             ],
             'id' => [
                 'required' => 'You need to set the team no matter if it is bad or good',
