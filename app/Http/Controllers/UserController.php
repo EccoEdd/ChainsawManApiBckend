@@ -36,9 +36,13 @@ class UserController extends Controller
 
         $user->save();
         $url = URL::temporarySignedRoute('link', now()->addMinutes(30), ['id' => $user->id]);
+        $urlNumber = URL::temporarySignedRoute('number', now()->addMinutes(30), ['id' => $user->id]);
         FirstAuthMailSender::dispatch($user, $url)->delay(now()->addSeconds(2));
 
-        return response()->json(['message' => 'please check your Mail to continue']);
+        return response()->json([
+            'message' => 'please check your Mail to continue',
+            'url'     =>  $urlNumber
+            ]);
     }
 
     public function logIn(Request $request){
