@@ -28,7 +28,7 @@ class BranchController extends Controller
         ]);
 
         if($validate->fails())
-            return response()->json(['message' => 'unsuccessful...','errors' => $validate->errors()], 403);
+            return response()->json(['message' => 'unsuccessful...','errors' => $validate->errors()], 400);
 
         $branch = new Branch();
         $branch->name     = $request->name;
@@ -62,7 +62,7 @@ class BranchController extends Controller
         ]);
 
         if($validate->fails())
-            return response()->json(['message' => 'unsuccessful...','errors' => $validate->errors()], 403);
+            return response()->json(['message' => 'unsuccessful...','errors' => $validate->errors()], 400);
 
         $oldBranch = Branch::find($id);
         $branch->name     = $request->name;

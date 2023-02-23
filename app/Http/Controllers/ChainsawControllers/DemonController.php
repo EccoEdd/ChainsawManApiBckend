@@ -25,7 +25,7 @@ class DemonController extends Controller
         ]);
 
         if($validate->fails())
-            return response()->json(['message' => 'unsuccessful...','errors' => $validate->errors()], 403);
+            return response()->json(['message' => 'unsuccessful...','errors' => $validate->errors()], 400);
 
         $demon = new Demon();
         $demon->name = $request->name;
@@ -59,7 +59,7 @@ class DemonController extends Controller
         ]);
 
         if($validate->fails())
-            return response()->json(['message' => 'unsuccessful...','errors' => $validate->errors()], 403);
+            return response()->json(['message' => 'unsuccessful...','errors' => $validate->errors()], 400);
 
         $oldDemon = Demon::find($id);
         $demon->name = $request->name;

@@ -26,7 +26,7 @@ class TeamController extends Controller
         ]);
 
         if($validate->fails())
-            return response()->json(['message' => 'unsuccessful...','errors' => $validate->errors()], 403);
+            return response()->json(['message' => 'unsuccessful...','errors' => $validate->errors()], 400);
 
         $team = new Team();
         $team->name = $request->name;
@@ -66,7 +66,7 @@ class TeamController extends Controller
         ]);
 
         if($validate->fails())
-            return response()->json(['message' => 'unsuccessful...','errors' => $validate->errors()], 403);
+            return response()->json(['message' => 'unsuccessful...','errors' => $validate->errors()], 400);
 
         $oldTeam = Team::find($id);
         $team->name = $request->name;

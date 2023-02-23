@@ -23,7 +23,7 @@ class UserController extends Controller
             'password' => 'required'
         ]);
         if($validation->fails())
-            return response()->json(['message' => 'unsuccessful...','errors' => $validation->errors()], 403);
+            return response()->json(['message' => 'unsuccessful...','errors' => $validation->errors()], 400);
 
         $user = new User();
 

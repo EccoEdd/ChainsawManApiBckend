@@ -12,7 +12,7 @@ class CharacterController extends Controller
     public function createCharacter(Request $request){
         $validate = $this->getMake($request);
         if($validate->fails())
-            return response()->json(['message' => 'unsuccessful...','errors' => $validate->errors()], 403);
+            return response()->json(['message' => 'unsuccessful...','errors' => $validate->errors()], 400);
         $character = new Character();
         $character->name = $request->name;
         $character->l_name = $request->l_name;
@@ -33,7 +33,7 @@ class CharacterController extends Controller
 
         $validate = $this->getMake($request);
         if($validate->fails())
-            return response()->json(['message' => 'unsuccessful...','errors' => $validate->errors()], 403);
+            return response()->json(['message' => 'unsuccessful...','errors' => $validate->errors()], 400);
 
         $oldCharacter = Character::find($id);
 
