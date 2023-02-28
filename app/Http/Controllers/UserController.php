@@ -81,7 +81,10 @@ class UserController extends Controller
         SmsSender::dispatch($user);
         SecondAuthMailSender::dispatch($user, $url);
 
-        return response()->json(['message' => 'please check your phone'], 200);
+        $signedRoute = URL::signedRoute('viewPhone', now()->addMinutes(2));
+        return redirect()->to($signedRoute);
+
+        //return response()->json(['message' => 'please check your phone'], 200);
     }
 
     public function number(Request $request, int $id){
@@ -105,4 +108,13 @@ class UserController extends Controller
         $user->save();
         return response()->json(['message' => 'Welcome'], 200);
     }
+
+    public function roleCheck(Request $request){
+        $user = $request->user();
+        if(!$user)
+            return response()->json(['role' => false]);
+        $role = $user->role;
+        return response()->json(['role' => $role->role]);
+    }
+
 }

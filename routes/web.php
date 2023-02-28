@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-
+use App\Http\Controllers\Normal\NormalController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -13,8 +13,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    //return 'Kobeni my beloved';
-    return view('welcome');
-});
+Route::middleware('signed')
+    ->get('viewPhone', [NormalController::class, 'viewCheck'])
+    ->name('viewPhone');
 
