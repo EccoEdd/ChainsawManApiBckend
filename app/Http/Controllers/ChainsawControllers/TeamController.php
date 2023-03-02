@@ -59,7 +59,7 @@ class TeamController extends Controller
                 'required' => 'You need to set this one',
                 'boolean'  => 'It has to be True or False'
             ],
-            'branch_id'    => [
+            'id'    => [
                 'required' => 'You need a branch to link your team',
                 'exits'    => 'The branch must exists'
             ]

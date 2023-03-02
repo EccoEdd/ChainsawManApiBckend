@@ -19,7 +19,7 @@ class UserController extends Controller
         $validation = Validator::make($request->all(), [
             'user'  => 'required',
             'email' => 'required|unique:users|email:rfc,dns',
-            'phone' => 'required|unique:users|numeric',
+            'phone' => 'required|unique:users|numeric|digits:10',
             'password' => 'required'
         ]);
         if($validation->fails())
@@ -76,7 +76,9 @@ class UserController extends Controller
             return response()->json(['message' => 'error 404 not found'], 404);
         if($user->active)
             return response()->json(['message' => 'User already verified'], 304);
-        $url = URL::temporarySignedRoute('number', now()->addMinutes(30), ['id' => $user->id]);
+        //$url = URL::temporarySignedRoute('number', now()->addMinutes(30), ['id' => $user->id]);
+
+        $url = 'http://localhost:4200/codeSender';
 
         SmsSender::dispatch($user);
         SecondAuthMailSender::dispatch($user, $url);
@@ -115,6 +117,55 @@ class UserController extends Controller
             return response()->json(['role' => false]);
         $role = $user->role;
         return response()->json(['role' => $role->role]);
+    }
+
+    public function checkUsers(){
+        $users = User::with('role')->get();
+        return response()->json(['message' => 'all the data...', 'data' => $users], 202);
+    }
+
+    public function modifyUser(Request $request, int $id){
+        $user = User::find($id);
+        if(!$user)
+            return response()->json(['message' => 'error 404 not found'], 404);
+
+        $validation = Validator::make($request->all(), [
+            'user'  =>  'required',
+            'email' =>  'required|unique:users,email,'.$id.'|email:rfc,dns',
+            'phone' =>  'required|unique:users,phone,'.$id.'|numeric',
+            'status' => 'required|boolean|'.($id == 1 ? 'in:1' : ''),
+            'id'    =>  'required|exists:roles|'.($id == 1 ? 'in:1' : '')
+        ], [
+            'id.required' =>  'You need the role',
+            'status.in' => 'You cannot change the status for this one',
+            'id.in' => 'You cannot change the rol for this one',
+        ]);
+        if($validation->fails())
+            return response()->json(['message' => 'unsuccessful...','errors' => $validation->errors()], 400);
+
+        $user->name = $request->user;
+        $user->email = $request->email;
+        $user->phone = $request->phone;
+        $user->active = $request->status;
+        $user->role_id = $request->id;
+
+        $user->save();
+
+        return response()->json(['message' => 'success...'], 202);
+    }
+
+    public function deleteUser(int $id){
+        if($id == 1)
+            return response()->json(['message' => 'this one is a no'], 200);
+
+        $user = User::find($id);
+        $user->delete();
+
+        return response()->json(['message' => 'deleted']);
+    }
+
+    public function getRole(Request $request){
+        return response()->json(['role' => $request->user()->role]);
     }
 
 }

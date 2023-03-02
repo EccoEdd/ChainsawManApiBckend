@@ -9,8 +9,6 @@
 <body>
     <h1>Hello once more {{ $name }}!</h1>
     <p>Just a step further to end the register</p>
-    <p>Copy the link from below and use it in your http consumer of preference</p>
-    <p>Or go to the page in the code place and paste there your code</p>
-    <a href="{{ $url }}">Link To Copy</a>
+    <a href="{{ $url }}">Click Here</a>
 </body>
 </html>
